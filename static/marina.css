@@ -1,0 +1,23 @@
+body {
+  font-family: arial;
+  font-size: 14px
+}
+.boat_details {
+  margin-top: 10px;
+  max-width: 500px;
+  width: 100%
+}
+.boat_details td {
+  border: 1px solid black;
+  padding: 5px;
+}
+.boat_details td:nth-child(even) {
+  background-color: #fbeebd
+}
+.boat_details td:nth-child(odd) {
+  font-weight: bold
+}
+a {
+  color: blue;
+  text-decoration: none;
+}
