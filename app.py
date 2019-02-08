@@ -36,6 +36,7 @@ def home():
 @app.route("/boat/tootsie")
 def boat(searched_ship):
     boat_data = do_search(searched_ship)
+    print(boat_data[0][0])                                  # CANNOT SEEM TO ACCESS DICT OR LIST HERE
     return render_template('boat.html', data=boat_data)
 
 
@@ -43,8 +44,7 @@ def do_search(searched_ship):
     conn_string = "host='localhost' dbname='marina' user='atz' password='password'"
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM boats WHERE bname = '" + searched_ship + "'")
-    print("SELECT * FROM boats WHERE bname = '" + searched_ship + "'")
+    cursor.execute("SELECT row_to_json(boats) FROM boats WHERE bname = '" + searched_ship + "'")
     return cursor.fetchall()
 
 
