@@ -9,6 +9,12 @@
 
   <body>
     <h1> <a href="/" style="color:black">Marina App</a></h1>
+
+    <form action="{{ url_for('home') }}" method="get">
+      <input type="text" name="search" placeholder="search boat" />
+      <input type="submit" value="search" />
+    </form>
+
     {% block content %}{% endblock %}
   </body>
 
