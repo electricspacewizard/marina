@@ -1,4 +1,4 @@
-from flask import Flask, redirect
+from flask import Flask, redirect, send_from_directory
 from flask import render_template
 # from models import db
 import psycopg2
@@ -6,6 +6,7 @@ import sys
 import pprint
 from flask import request
 import pdb
+import os
 
 
 app = Flask(__name__)
@@ -20,13 +21,6 @@ POSTGRES = {
 }
 
 
-#BUGS - wont let you input loa as a int
-
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://%(user)s:\
-# %(pw)s@%(host)s:%(port)s/%(db)s' % POSTGRES
-# db.init_app(app)
-
-
 @app.route("/", methods=["POST", "GET"])
 def home():
     if request.args.get('search'):
@@ -34,6 +28,12 @@ def home():
         return redirect('/boat/' + searched_boat)
     else:
       return render_template('home.html')
+
+
+@app.route('/images/boats/<path:path>')                     #Read up more in the image pathes
+def send_image(path):
+    return send_from_directory('images/boats', path)
+
 
 @app.route("/boat/<name>")
 def boat(name):
@@ -49,14 +49,15 @@ def do_search(searched_ship):
     return cursor.fetchall()[0][0]
 
 
-def addboatdatabase(bname, btype, loa):
+def add_boat_database(bname, btype, loa):
     try:
-        conn_string = "host='localhost' dbname='marina' user='atz' password='password'"
+        conn_string = "host='localhost' dbname='marina' user='marina' password='password'"
         conn = psycopg2.connect(conn_string)
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO boats(bname, btype, loa) VALUES('" + bname + "', '" + btype + "', '" + loa + "')")
+        cursor.execute("INSERT INTO boats(bname, btype, loa) VALUES('" + bname + "', '" + btype + "', '" + loa + "') RETURNING id")
+        inserted_id = cursor.fetchone()[0]
         conn.commit()
-        return True
+        return inserted_id
     except Exception as e:
         print(e)
         return False
@@ -70,13 +71,13 @@ def addboat():
         bname = request.form['bname']
         btype = request.form['btype']
         loa = request.form['loa']
-        successful = addboatdatabase(bname, btype, loa)
-        if successful:
+        inserted_id = add_boat_database(bname, btype, loa)
+        if inserted_id:
+            image = request.files['image']
+            image.save(os.path.join('images/boats', str(inserted_id) + '.jpg'))
             return render_template('addboat.html', data="Boat Succesfully Added")
         else:
             return render_template('addboat.html', data="Boat was not added, check inputs ")
-
-
 
 @app.route("/test")
 def test():
