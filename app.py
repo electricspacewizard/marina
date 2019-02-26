@@ -42,7 +42,8 @@ def boat(name):
 
 
 def do_search(searched_ship):
-    conn_string = "host='localhost' dbname='marina' user='marina' password='password'"
+    db_host = 'postgres-db' if os.environ.get('IN_DOCKER') == '1' else 'localhost'
+    conn_string = "host='" + db_host + "' dbname='marina' user='marina' password='password'"
     conn = psycopg2.connect(conn_string)
     cursor = conn.cursor()
     cursor.execute("SELECT row_to_json(boats) FROM boats WHERE bname = '" + searched_ship + "'")
@@ -63,6 +64,13 @@ def add_boat_database(bname, btype, loa):
         return False
 
 
+@app.route('/delete_boat', methods=["POST", "GET"])
+def delete_boat():
+    if request.method == "POST":
+        id = request.form['boat_id']
+        return id
+
+
 @app.route('/addboat', methods=["POST", "GET"])
 def addboat():
     if request.method == "GET":
@@ -78,6 +86,7 @@ def addboat():
             return render_template('addboat.html', data="Boat Succesfully Added")
         else:
             return render_template('addboat.html', data="Boat was not added, check inputs ")
+
 
 @app.route("/test")
 def test():
