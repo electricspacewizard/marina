@@ -24,6 +24,7 @@ conn_string = f"host='{db_host}' dbname='{DB['db']}' user='{DB['user']}' passwor
 db_conn = psycopg2.connect(conn_string)
 cursor = db_conn.cursor()
 
+
 @app.route("/", methods=["POST", "GET"])
 def home():
     if request.args.get('search'):

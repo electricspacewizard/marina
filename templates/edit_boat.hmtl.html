@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <h3>Edit Boat</h3>
+
+     <form action="/boat/{{ boat['bname'] }}" method="post" enctype="multipart/form-data">
+      <input type="text" name="bname"  value="{{ boat['bname'] }}"/>
+      <br />
+
+      <br />
+      <input type="text" name="btype" value="{{ boat['btype'] }}">
+       <br />
+       <br />
+
+        <input type="text" name="loa" value="{{ boat['loa'] }}">
+        <br />
+        <br />
+
+        <input type="file" name="image" placehodler="Boat image" />
+
+        <br />
+        <br />
+
+        <input type="hidden" name="boat_id" value="{{ boat['id'] }}" />
+        <input type="submit" value="Update" />
+    </form>
+
+
+{% endblock %}
