@@ -1,3 +1,13 @@
+<script>
+  function confirmDelete() {
+    var result = confirm("Are you sure you want to delete this boat?")
+    if(result) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+</script>
 
 {% extends "layout.html" %}
 {% block content %}
@@ -8,9 +18,11 @@
     {% else %}
 
     <img src="/images/boats/{{ boat['id'] }}.jpg"
-     style="width:100%; max-width: 500px">
+     style="width:100%; max-width: 500px; margin-bottom: 20px">
 
-    <table class="boat_details" cellpadding="0" cellspacing="0">
+    <h3> Vessel Details</h3>
+
+     <table class="boat_details" cellpadding="0" cellspacing="0" style="margin-bottom: 20px">
       <tr>
         <td>Boat Name</td>
         <td>{{ boat['bname'] }}</td>
@@ -25,32 +37,73 @@
       </tr>
       <tr>
         <td>Beam</td>
-        <td>3.25m</td>
+        <td>{{ boat['beam'] }}m</td>
       </tr>
       <tr>
         <td>Draft</td>
-        <td>1.83m</td>
+        <td>{{ boat['draft'] }}</td>
       </tr>
       <tr>
         <td>Keel Type</td>
-        <td>Fin</td>
+        <td>{{ boat['keel_type'] }}</td>
       </tr>
       <tr>
         <td>Dead Weight</td>
-        <td>6.5T on LW</td>
+        <td>{{ boat['dead_weight'] }}</td>
       </tr>
       <tr>
         <td>Shaft type</td>
-        <td>Outdrive</td>
+        <td>{{ boat['shaft_type'] }}</td>
+      </tr>
+    </table>
+
+    <h3>Crane Details</h3>
+
+     <table class="boat_details" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>Spreader</td>
+        <td>{{ boat['spreader'] }}</td>
+      </tr>
+      <tr>
+        <td>Strop Type</td>
+        <td>{{ boat['strop_type'] }}</td>
+      </tr>
+      <tr>
+        <td>Links FWD</td>
+        <td>{{ boat['links_fwd'] }}</td>
+      </tr>
+      <tr>
+        <td>Links AFT</td>
+        <td>{{ boat['links_aft'] }}m</td>
+      </tr>
+      <tr>
+        <td>Cradle Type</td>
+        <td>{{ boat['cradle_type'] }}</td>
+      </tr>
+      <tr>
+        <td>Fwd Strop Pos</td>
+        <td>{{ boat['fwd_strop_pos'] }}</td>
+      </tr>
+      <tr>
+        <td>Aft Strop Pos</td>
+        <td>{{ boat['aft_strop_pos'] }}</td>
+      </tr>
+      <tr>
+        <td>Mast Up / Down</td>
+        <td>{{ boat['mast'] }}</td>
       </tr>
     </table>
 
     {% endif %}
      <br />
 
-    <form action="{{ url_for('delete_boat') }}" method="post" enctype="multipart/form-data">
-        <input type="hidden" name="boat_id" id="boat_id" value="{{ boat['id'] }}">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Delete</button>
+    <a href= "/boat/{{ boat['bname'] }}/edit">
+      <button class="btn btn-outline-success my-2 my-sm-0">Edit</button>
+    </a>
+
+    <form class="d-inline" action="/boat/{{ boat['bname'] }}/delete" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="boat_id" id="boat_id" value="{{ boat['id'] }}" />
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit" onclick="return confirmDelete()">Delete</button>
     </form>
 
     <a href="/" style="display: block; margin-top: 10px"><< Back to home</a>

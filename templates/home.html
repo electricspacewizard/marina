@@ -2,8 +2,10 @@
 {% block content %}
     <h2>Marina Boat App</h2>
     <ul>
-      <li><a href="/boat/tootsie">Tootsie</a></li>
-      <li>Deben</li>
-      <li>Squire</li>
+
+      {% for boat in boats %}
+        <li><a href="/boat/{{ boat['bname'] }}">{{ boat['bname'].capitalize() }}</a></li>
+      {% endfor %}
+
     </ul>
 {% endblock %}
