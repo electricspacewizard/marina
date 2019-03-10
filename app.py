@@ -1,15 +1,15 @@
-from flask import Flask, redirect, send_from_directory
-from flask import render_template
+from flask import Flask, redirect, send_from_directory, render_template, session, flash
 from psycopg2.extras import RealDictCursor
+from functools import wraps
 # from models import db
 import psycopg2
-import sys
-import pprint
 from flask import request
-import pdb
 import os
 
 app = Flask(__name__)
+
+# How does the session use this?
+app.config['SECRET_KEY'] = os.urandom(34)
 
 DB = {
     'user': 'marina',
@@ -23,6 +23,34 @@ db_host = 'postgres-db' if os.environ.get('IN_DOCKER') == '1' else 'localhost'
 conn_string = f"host='{db_host}' dbname='{DB['db']}' user='{DB['user']}' password='{DB['pw']}'"
 db_conn = psycopg2.connect(conn_string)
 cursor = db_conn.cursor()
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            session['logged_in'] = True
+            return redirect('/')
+    return render_template('login.html', error=error)
+
+def login_required(f):
+    @wraps(f)
+    def wrap(*args, **kwargs):
+        if 'logged_in' in session:
+            return f(*args, **kwargs)
+        else:
+            flash('You are not logged in')
+            return redirect('/login')
+    return wrap
+
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect('/')
 
 
 @app.route("/", methods=["POST", "GET"])
@@ -70,11 +98,13 @@ def add_boat_database(bname, btype, loa):
         return False
 
 @app.route('/boat/new', methods=["GET"])
+@login_required
 def new_boat():
     return render_template('addboat.html')
 
 
 @app.route('/boat/<name>/edit', methods=["GET"])
+@login_required
 def edit_boat(name):
     cursor = db_conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute(f"SELECT * FROM boats WHERE bname='{name}'")
@@ -84,6 +114,7 @@ def edit_boat(name):
 
 
 @app.route('/boat/<name>/delete', methods=["POST"])
+@login_required
 def delete_boat(name):
     cursor.execute(f"DELETE from boats WHERE bname='{name}'")
     db_conn.commit()
@@ -91,6 +122,7 @@ def delete_boat(name):
 
 
 @app.route('/boat/<name>', methods=["POST"])
+@login_required
 def update_boat(name):
   bname = request.form['bname']
   btype = request.form['btype']
@@ -110,6 +142,7 @@ def update_boat(name):
 
 
 @app.route('/boat', methods=['POST'])
+@login_required
 def add_boat():
     bname = request.form['bname'].capitalize()
     btype = request.form['btype'].capitalize()

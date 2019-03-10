@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% block content %}
+    <html>
+      <head>
+        <title>Login Page</title>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Please login</h1>
+          <br>
+          <form action="" method="post">
+            <input type="text"  name="username" value="admin">
+             <input type="password"  name="password" value="admin">
+            <input class="btn btn-default" type="submit" value="Login">
+          </form>
+          {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}
+          {% endif %}
+        </div>
+      </body>
+    </html>
+{% endblock %}
+
+<!--
+
+This should be the code for the login inputs, currently using hardcoded values for development
+
+<input type="text" placeholder="admin" name="username" value="{{
+              request.form.username }}">
+<input type="password" placeholder="admin" name="password" value="{{
+              request.form.password }}">
+-->
