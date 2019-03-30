@@ -1,6 +1,6 @@
 body {
   font-family: arial;
-  font-size: 14px
+  font-size: 14px;
 }
 .boat_details {
   margin-top: 10px;
@@ -20,4 +20,24 @@ body {
 a {
   color: blue;
   text-decoration: none;
+}
+
+#content {
+  padding: 20px;
+}
+
+.boat-card {
+  border-radius: 3px;
+  border: 1px solid #CCC;
+  margin-bottom: 10px;
+  max-width: 500px;
+}
+
+.boat-card img {
+  margin-right: 5px;
+}
+
+.ui-menu-item {
+  font-size: 20px;
+  padding: 10px
 }

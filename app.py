@@ -5,6 +5,11 @@ from functools import wraps
 import psycopg2
 from flask import request
 import os
+import boto3, botocore
+
+# for reading environment variables from .env
+#from dotenv import load_dotenv
+#load_dotenv()
 
 app = Flask(__name__)
 
@@ -19,11 +24,46 @@ DB = {
     'port': '5432'
 }
 
+S3_BUCKET = os.getenv('S3_BUCKET')
+S3_LOCATION = 'http://{}.s3.amazonaws.com/marina-boat-images/'.format(S3_BUCKET)
+
 db_host = 'postgres-db' if os.environ.get('IN_DOCKER') == '1' else 'localhost'
 conn_string = f"host='{db_host}' dbname='{DB['db']}' user='{DB['user']}' password='{DB['pw']}'"
 db_conn = psycopg2.connect(conn_string)
 cursor = db_conn.cursor()
 
+
+s3 = boto3.client(
+  's3',
+  aws_access_key_id=os.getenv('S3_KEY'),
+  aws_secret_access_key=os.getenv('S3_SECRET')
+)
+
+@app.context_processor
+def inject_boat_names():
+  cursor = db_conn.cursor(cursor_factory=RealDictCursor)
+  cursor.execute("SELECT bname FROM boats")
+  boats = cursor.fetchall()
+  names = [boat['bname'] for boat in boats]
+  db_conn.commit()
+  return dict(boat_names=names)
+
+def upload_file_to_s3(file, file_name):
+  try:
+    s3.upload_fileobj(
+      file,
+      S3_BUCKET,
+      file_name.lower() + '.jpg',
+      ExtraArgs={
+        "ACL": "public-read",
+        "ContentType": file.content_type
+      }
+    )
+  except Exception as e:
+    print("Something Happened: ", e)
+    return e
+
+  return "{}{}".format(S3_LOCATION, file.filename)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -124,15 +164,21 @@ def delete_boat(name):
 @app.route('/boat/<name>', methods=["POST"])
 @login_required
 def update_boat(name):
+
   bname = request.form['bname']
   btype = request.form['btype']
   loa = request.form['loa']
   boat_id = request.form['boat_id']
+  beam = request.form['beam']
+  draft = request.form['draft']
+  keel_type = request.form['keel_type']
+  dead_weight = request.form['dead_weight']
+  shaft_type = request.form['shaft_type']
 
   # get() returns NoneType rather than break with a usual dict lookup
   image = request.files.get('image')
 
-  cursor.execute(f"UPDATE boats SET btype='{btype}', loa='{loa}', bname='{bname}' WHERE bname='{name}'")
+  cursor.execute(f"UPDATE boats SET btype='{btype}', loa='{loa}', bname='{bname}', beam={beam}, draft={draft} WHERE bname='{name}'")
   db_conn.commit()
 
   if image:
@@ -149,8 +195,10 @@ def add_boat():
     loa = request.form['loa']
     inserted_id = add_boat_database(bname, btype, loa)
     if inserted_id:
+
         image = request.files['image']
-        image.save(os.path.join('images/boats', str(inserted_id) + '.jpg'))
+        # image.save(os.path.join('images/boats', str(inserted_id) + '.jpg'))
+        upload_file_to_s3(image, bname)
         return redirect('/boat/' + bname)
     else:
         return render_template('addboat.html', data="Boat was not added, check inputs ")
@@ -162,4 +210,5 @@ def test():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    flask_port = 80 if os.getenv('IN_DOCKER') else 5000
+    app.run(debug=True, host='127.0.0.1', port=flask_port)    # changed this from 0.0.0.0, query James
