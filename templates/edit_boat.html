@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+
+    <h3>Edit Boat</h3>
+
+    <form action="/boat/{{ boat['bname'] }}" method="post" enctype="multipart/form-data">
+    <table>
+
+        <tr>
+            <td>Name</td>
+            <td><input type="text" name="bname"  value="{{ boat['bname'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Image</td>
+            <td><input type="file" name="image" /></td>
+        </tr>
+
+        <tr>
+            <td>Type</td>
+            <td><input type="text" name="btype"  value="{{ boat['btype'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>LOA</td>
+            <td><input type="text" name="loa"  value="{{ boat['loa'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Beam</td>
+            <td><input type="text" name="beam"  value="{{ boat['beam'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Draft</td>
+            <td><input type="text" name="draft"  value="{{ boat['draft'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Keel Type</td>
+            <td><input type="text" name="keel_type"  value="{{ boat['keel_type'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Dead weight</td>
+            <td><input type="text" name="dead_weight"  value="{{ boat['dead_weigh'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Shaft type</td>
+            <td><input type="text" name="shaft_type"  value="{{ boat['shaft_type'] }}"/></td>
+        </tr>
+
+
+    </table>
+
+    <input type="hidden" name="boat_id" value="{{ boat['id'] }}" />
+    <input type="submit" value="Update" />
+
+    </form>
+
+    </form>
+
+
+{% endblock %}

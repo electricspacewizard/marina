@@ -65,6 +65,21 @@ def upload_file_to_s3(file, file_name):
 
   return "{}{}".format(S3_LOCATION, file.filename)
 
+
+def get_boats():
+    cursor = db_conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute("SELECT * FROM boats")
+    boats = cursor.fetchall()
+    db_conn.commit()
+    return boats
+
+def get_lifts():
+    cursor = db_conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute("SELECT * FROM lifts")
+    lifts = cursor.fetchall()
+    db_conn.commit()
+    return lifts
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
@@ -99,11 +114,9 @@ def home():
         searched_boat = request.args.get('search')
         return redirect('/boat/' + searched_boat)
     else:
-      cursor = db_conn.cursor(cursor_factory=RealDictCursor)
-      cursor.execute("SELECT * FROM boats")
-      boats = cursor.fetchall()
-      db_conn.commit()
-      return render_template('home.html', boats=boats)
+      boats = get_boats()
+      lifts = get_lifts()
+      return render_template('home.html', boats=boats, lifts=lifts)
 
 
 @app.route('/images/boats/<path:path>')                     #Read up more in the image paths

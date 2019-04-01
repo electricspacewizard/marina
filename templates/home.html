@@ -1,6 +1,18 @@
 {% extends "layout.html" %}
 {% block content %}
 
+    {% if lifts %}
+        {% for lift in lifts %}
+            <b>Boat ID:</b> {{ lift['boat_id'] }}
+            <b>Direction:</b> {{ lift['direction'] }}
+            <b>Lift Time:</b> {{ lift['lift_time'] }}
+            <b>Paid:</b> {{ lift['paid'] }}
+            <br>
+            <br>
+        {% endfor %}
+    {% endif %}
+
+
     {% for boat in boats %}
       <a href="/boat/{{ boat['bname'] }}">
         <div class="boat-card clearfix"<a href="/boat/{{ boat['bname'] }}">
@@ -8,7 +20,7 @@
           style="width:100%; height: 80px; width: 80px; float: left">
 
           <p>
-            <b>{{ boat['bname'].capitalize() }}</a></b>
+            <b>{{ boat['bname'].capitalize() }}</a></br>
             <br />
             {{ boat['btype'] }}
           </p>
@@ -16,5 +28,7 @@
         </div>
       </a>
     {% endfor %}
+
+
 
 {% endblock %}
