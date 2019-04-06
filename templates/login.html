@@ -6,12 +6,24 @@
       </head>
       <body>
         <div class="container">
-          <h1>Please login</h1>
+          <h1>Marina login</h1>
           <br>
           <form action="" method="post">
-            <input type="text"  name="username" value="admin">
-             <input type="password"  name="password" value="admin">
-            <input class="btn btn-default" type="submit" value="Login">
+            <table class="table">
+
+              <tr>
+                <td>Username</td>
+                <td><input required name="username" value="admin" class="form-control"></td>
+              </tr>
+
+              <tr>
+                <td>Password</td>
+                <td><input required type="password"  name="password" value="admin" class="form-control"></td>
+              </tr>
+
+            </table>
+
+            <input class="btn btn-primary" type="submit" value="Login">
           </form>
           {% if error %}
             <p class="error"><strong>Error:</strong> {{ error }}

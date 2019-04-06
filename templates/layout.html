@@ -21,10 +21,6 @@
         <ul class="navbar-nav mr-auto">
           {% if session['logged_in']==True %}
             <li class="nav-item">
-              <a class="nav-link" href="/boat/new">Add Boat<span class="sr-only">(current)</span></a>
-            </li>
-
-            <li class="nav-item">
               <a class="nav-link" href="/logout">Logout<span class="sr-only">(current)</span></a>
             </li>
           {% else %}
@@ -32,6 +28,10 @@
               <a class="nav-link" href="/login">Login<span class="sr-only">(current)</span></a>
             </li>
           {% endif %}
+
+          <li class="nav-item">
+            <a class="nav-link" href="/boat/new">Add Boat<span class="sr-only">(current)</span></a>
+          </li>
         </ul>
 
         <form class="form-inline my-2 my-lg-0 ui-widget" action="{{ url_for('home') }}" method="get">
@@ -62,13 +62,17 @@
         var boatNames = {{ boat_names | tojson }};
 
         $("#boat-search").autocomplete({
-          source: boatNames
+          source: boatNames,
+          open: function(event, ui) {
+            $('.ui-autocomplete').off('menufocus hover mouseover mouseenter');
+          }
         });
 
         $('body').on('click', '.ui-menu-item', function($event) {
           var boatName = $event.target.textContent
           window.location = "/boat/" + boatName
         })
+
       })
     </script>
   </body>

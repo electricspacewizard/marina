@@ -19,13 +19,13 @@
 
     <!-- <img src="/images/boats/{{ boat['id'] }}.jpg" -->
     <img src="https://s3.eu-west-2.amazonaws.com/marina-boat-images/{{ boat['bname'].lower() }}.jpg"
-     style="width:100%; max-width: 500px; margin-bottom: 20px">
+     style="width:100%; max-width: 500px; margin-bottom: 20px; border: 1px solid black">
 
     <h3> Vessel Details</h3>
 
      <table class="boat_details" cellpadding="0" cellspacing="0" style="margin-bottom: 20px">
       <tr>
-        <td>Boat Name</td>
+        <td width="180">Boat Name</td>
         <td>{{ boat['bname'] }}</td>
       </tr>
       <tr>
@@ -41,8 +41,12 @@
         <td>{{ boat['beam'] }}m</td>
       </tr>
       <tr>
-        <td>Draft</td>
-        <td>{{ boat['draft'] }}</td>
+        <td>Draft (in meters)</td>
+        <td>{{ boat['draft'] }}m</td>
+      </tr>
+      <tr>
+        <td>Draft (in ft)</td>
+        <td>{{ boat['draft'] * 3.28 }}ft</td>
       </tr>
       <tr>
         <td>Keel Type</td>
@@ -62,36 +66,40 @@
 
      <table class="boat_details" cellpadding="0" cellspacing="0">
       <tr>
-        <td>Spreader</td>
-        <td>{{ boat['spreader'] }}</td>
+        <td width="180">Spreader</td>
+        <td>{{ boat['spreader'] if boat['spreader'] }}</td>
       </tr>
       <tr>
         <td>Strop Type</td>
-        <td>{{ boat['strop_type'] }}</td>
+        <td>{{ boat['strop_type'] if boat['strop_type'] }}</td>
       </tr>
       <tr>
         <td>Links FWD</td>
-        <td>{{ boat['links_fwd'] }}</td>
+        <td>{{ boat['links_fwd'] if boat['links_fwd'] }}</td>
       </tr>
       <tr>
         <td>Links AFT</td>
-        <td>{{ boat['links_aft'] }}m</td>
+        <td>{{ boat['links_aft'] if boat['links_fwd'] }}m</td>
       </tr>
       <tr>
         <td>Cradle Type</td>
-        <td>{{ boat['cradle_type'] }}</td>
+        <td>{{ boat['cradle_type'] if boat['cradle_type'] }}</td>
       </tr>
       <tr>
         <td>Fwd Strop Pos</td>
-        <td>{{ boat['fwd_strop_pos'] }}</td>
+        <td>{{ boat['fwd_strop_pos'] if boat['fwd_strop_pos'] }}</td>
       </tr>
       <tr>
         <td>Aft Strop Pos</td>
-        <td>{{ boat['aft_strop_pos'] }}</td>
+        <td>{{ boat['aft_strop_post'] if boat['aft_strop_post'] }}</td>
       </tr>
       <tr>
         <td>Mast Up / Down</td>
-        <td>{{ boat['mast'] }}</td>
+        <td>{{ boat['mast'] if boat['mast'] }}</td>
+      </tr>
+      <tr>
+        <td>Additional Notes</td>
+        <td>{{ boat['notes'] if boat['notes'] }}</td>
       </tr>
     </table>
 

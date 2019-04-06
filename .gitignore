@@ -5,3 +5,5 @@ database
 
 images/boats/*
 !images/boats/.gitkeep
+
+marina.env

@@ -25,7 +25,8 @@ Boot up the Docker based Postgres with:
 Currently deployed to AWS Fargate
 
 For the AWS CLI login, use the correct profile with:
-`$(aws ecr get-login --no-include-email --region eu-west-2)`
+`$(aws ecr get-login --no-include-email --region eu-west-2 --profile marina)`jk
+(note this assumes the existance of a `marina` profile in your `.aws/credentials` wich ECS container permissions)
 
 Then push the built docker image up to the `marina` ECS repo with the usual push commands.
 Once pushed, head into the `marina` cluster and run as a new Task.

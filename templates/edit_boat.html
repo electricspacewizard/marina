@@ -1,61 +1,122 @@
 {% extends "layout.html" %}
 {% block content %}
 
-    <h3>Edit Boat</h3>
+    <h3 style="margin-bottom: 25px">Edit Boat: {{ boat['bname'] }}</h3>
+
+    <h5>Vessel Details</h5>
 
     <form action="/boat/{{ boat['bname'] }}" method="post" enctype="multipart/form-data">
-    <table>
+    <table cellpadding="5" class="table">
 
         <tr>
-            <td>Name</td>
-            <td><input type="text" name="bname"  value="{{ boat['bname'] }}"/></td>
+            <td width="200">Name</td>
+            <td><input required name="bname"  value="{{ boat['bname'] }}" class="form-control" /></td>
         </tr>
 
         <tr>
             <td>Image</td>
-            <td><input type="file" name="image" /></td>
+            <td><input type="file" name="image" class="form-control" /></td>
         </tr>
 
         <tr>
             <td>Type</td>
-            <td><input type="text" name="btype"  value="{{ boat['btype'] }}"/></td>
+            <td><input required name="btype"  class="form-control"  value="{{ boat['btype'] }}"/></td>
         </tr>
 
         <tr>
             <td>LOA</td>
-            <td><input type="text" name="loa"  value="{{ boat['loa'] }}"/></td>
+            <td><input required name="loa" type="number" step="any" class="form-control"  value="{{ boat['loa'] }}"/></td>
         </tr>
 
         <tr>
             <td>Beam</td>
-            <td><input type="text" name="beam"  value="{{ boat['beam'] }}"/></td>
+            <td><input required name="beam"  class="form-control"  value="{{ boat['beam'] if boat['beam'] }}"/></td>
         </tr>
 
         <tr>
             <td>Draft</td>
-            <td><input type="text" name="draft"  value="{{ boat['draft'] }}"/></td>
+            <td><input required type="number" step="any" name="draft"  class="form-control"  value="{{ boat['draft'] if boat['draft'] }}"/></td>
         </tr>
 
         <tr>
             <td>Keel Type</td>
-            <td><input type="text" name="keel_type"  value="{{ boat['keel_type'] }}"/></td>
+            <td><input required name="keel_type"  class="form-control"  value="{{ boat['keel_type'] if boat['keel_type'] }}"/></td>
         </tr>
 
         <tr>
             <td>Dead weight</td>
-            <td><input type="text" name="dead_weight"  value="{{ boat['dead_weigh'] }}"/></td>
+            <td><input required name="dead_weight"  class="form-control"  value="{{ boat['dead_weight'] if boat['dead_weight'] }}"/></td>
         </tr>
 
         <tr>
             <td>Shaft type</td>
-            <td><input type="text" name="shaft_type"  value="{{ boat['shaft_type'] }}"/></td>
+            <td><input required name="shaft_type"  class="form-control" value="{{ boat['shaft_type'] if boat['shaft_type'] }}"/></td>
+        </tr>
+    </table>
+
+    <h5>Crane Details</h5>
+
+    <table cellpadding="5" class="table">
+
+        <tr>
+            <td width="200">Spreader</td>
+            <td>
+              <input required name="spreader"  value="{{ boat['spreader'] if boat['spreader'] }}" class="form-control" />
+
+              <!--
+              <select name="spreader" class="form-control">
+                <option>Single</option>
+                <option>Medium</option>
+                <option>Big</option>
+              </select>
+              -->
+
+            </td>
         </tr>
 
+        <tr>
+            <td>Strop Type</td>
+            <td><input required name="strop_type" class="form-control" value="{{ boat['strop_type'] if boat['strop_type'] }}" /></td>
+        </tr>
 
+        <tr>
+            <td>Links FWD</td>
+            <td><input required name="links_fwd"  class="form-control" value="{{ boat['links_fwd'] if boat['links_fwd'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Links AFT</td>
+            <td><input required name="links_aft"  class="form-control"  value="{{ boat['links_aft'] if boat['links_aft'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Cradle Type</td>
+            <td><input required name="cradle_type"  class="form-control"  value="{{ boat['cradle_type'] if boat['cradle_type'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Fwd Strop Pos</td>
+            <td><input required name="fwd_strop_pos"  class="form-control"  value="{{ boat['fwd_strop_pos'] if boat['fwd_strop_pos'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Aft Strop Pos</td>
+            <td><input required name="aft_strop_post"  class="form-control"  value="{{ boat['aft_strop_post'] if boat['aft_strop_post'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Mast Up / Down</td>
+            <td><input required name="mast"  class="form-control"  value="{{ boat['mast'] if boat['mast'] }}"/></td>
+        </tr>
+
+        <tr>
+            <td>Additional notes</td>
+            <td colspan="2"><textarea class="form-control" name="notes"></textarea></td>
+        </tr>
     </table>
 
     <input type="hidden" name="boat_id" value="{{ boat['id'] }}" />
-    <input type="submit" value="Update" />
+    <input type="submit" value="Update" class="btn btn-primary" />
 
     </form>
 

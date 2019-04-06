@@ -3,31 +3,60 @@
 
     <h3>Add Boat</h3>
 
-    {% if data %}
-    {% print(data) %}
-    {% endif %}
+    <form action="/boat" method="post" enctype="multipart/form-data">
+    <table cellpadding="5" class="table">
 
+        <tr>
+            <td>Name</td>
+            <td><input required name="bname"  class="form-control" /></td>
+        </tr>
 
-     <form action="{{ url_for('add_boat') }}" method="post" enctype="multipart/form-data">
-      Name: <input type="text" name="bname" placeholder="Boat Name" value="Yellow"/>
-      <br />
+        <tr>
+            <td>Image</td>
+            <td><input required type="file" name="image" class="form-control" /></td>
+        </tr>
 
-      <br />
-      Type:
-      <input type="text" name="btype" placeholder="Boat Type" value="Pokemon">
-       <br />
-       <br />
+        <tr>
+            <td>Type</td>
+            <td><input required name="btype"  class="form-control"/></td>
+        </tr>
 
-        <input type="text" name="loa" placeholder="Boat LOA" value="10.5">
-        <br />
-        <br />
+        <tr>
+            <td>LOA</td>
+            <td><input required type="number" step="any" name="loa"  class="form-control" /></td>
+        </tr>
 
-        <input type="file" name="image" placehodler="Boat image" />
+        <tr>
+            <td>Beam (in meters)</td>
+            <td><input type="number" step="any" name="beam"  class="form-control" /></td>
+        </tr>
 
-        <br />
-        <br />
+        <tr>
+            <td>Draft (in meters)</td>
+            <td><input type="number" step="any" name="draft"  class="form-control" /></td>
+        </tr>
 
-        <input type="submit" value="Add boat" />
+        <tr>
+            <td>Keel Type</td>
+            <td><input name="keel_type"  class="form-control" /></td>
+        </tr>
+
+        <tr>
+            <td>Dead weight</td>
+            <td><input name="dead_weight"  class="form-control" /></td>
+        </tr>
+
+        <tr>
+            <td>Shaft type</td>
+            <td><input name="shaft_type"   class="form-control" /></td>
+        </tr>
+
+    </table>
+
+    <input type="submit" value="Add" class="btn btn-primary" />
+
+    </form>
+
     </form>
 
 
